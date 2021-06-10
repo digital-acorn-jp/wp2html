@@ -35,4 +35,4 @@ jobs:
 
       - name: Archive
         run: |
-          zip -r wp2html-${{ steps.version.outputs.filename }}.zip wp2html
+          zip -r ${{ steps.version.outputs.filename }}.zip wp2html
