@@ -1,0 +1,75 @@
+.wp2html-top {
+	margin-top: 2em;
+	max-width:790px;
+	padding-right: 10px;
+}
+
+.wp2html-settings-section .row{
+	display: flex;
+	flex-flow: row wrap;
+	line-height: 2em;
+	padding: 1em 0;
+}
+.wp2html-settings-section form .row:nth-of-type(2n){
+	background-color: #e0e0e0;
+}
+.wp2html-settings-section .row .label{
+	padding: 0 10px;
+	font-weight: bold;
+	width: 180px;
+}
+
+.wp2html-settings-section .row .item{
+	width: 570px;
+	padding: 0 10px;
+}
+
+.wp2html-settings-section .row .item input[type="text"],
+.wp2html-settings-section .row .item textarea {
+	width: calc(100% - 20px);
+}
+
+.wp2html-settings-section .row .item input[name="path"] {
+	width: 160px;
+}
+
+.wp2html-settings-section label{
+	user-select: none;
+}
+
+.wp2html-settings-section .row .left {
+	width: 50%;
+	text-align:left;
+}
+.wp2html-settings-section .row .right {
+	width: 50%;
+	text-align:right;
+}
+
+.wp2html-settings-section .wp2html_button {
+	display: inline-block;
+	width: 100px;
+	cursor: pointer;
+	text-align: center;
+	padding: 0;
+	text-decoration: none;
+}
+
+.wp2html-settings-section .wp2html_button.run {
+	background-color: #c00000;
+	border: 0;
+}
+.wp2html-settings-section .wp2html_button.run:hover {
+	background-color: #a00000;
+}
+
+.wp2html-settings-section .error-message {
+	color: red;
+}
+.wp2html-settings-section .error-message:empty {
+	display: none;
+}
+
+.wp2html-settings-section .generated-paths {
+	word-break: break-all;
+}
