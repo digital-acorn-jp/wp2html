@@ -3,15 +3,15 @@
 Plugin Name: wp2html
 Description: Make static HTMLs from WordPress
 Author: Digital Acorn
-Version: 1.0.0
+Version: 1.0.1
 */
 
 // Make sure we don't expose any info if called directly
-if ( !function_exists( 'add_action' ) ) {
+if ( !function_exists( 'add_action' ) || !isset( $_SERVER['SERVER_ADDR'] )) {
 	exit;
 }
 
-define( 'WP2HTML_VERSION',        '1.0.0' );
+define( 'WP2HTML_VERSION',        '1.0.1' );
 define( 'WP2HTML_MENU_SLUG',      'wordpress2html' );
 define( 'WP2HTML_PLUGIN_DIR',     plugin_dir_path( __FILE__ ) );
 define( 'WP2HTML_PLUGIN_NAME',    'wp2html' );
@@ -41,14 +41,4 @@ if ( ! class_exists( 'wp2html_create_links' ) ) {
 
 add_action( 'admin_menu', array( 'wp2html_main', 'add_menu' ) );
 add_action( 'admin_head-toplevel_page_wordpress2html', array( 'wp2html_admin', 'add_css') );
-
-// Customize the get_archives_link
-if ( ! function_exists( 'wp2html_get_archives_link' ) ) {
-	function wp2html_get_archives_link($link_html, $url, $text, $format, $before, $after, $selected) {
-		if ( 'url' === $format ) {
-			return $url . '|';
-		}
-		return $link_html;
-	}
-	add_filter( 'get_archives_link',  'wp2html_get_archives_link', 10, 7);
-}
+add_action( 'wp2html_action_when_the_post_is_saved', array( 'wp2html_main', 'on_save_post' ), 10, 2 );

@@ -29,21 +29,6 @@ Let's output static HTML and get rid of that overhead.
 5. Click the Genarate button.
 6. Genarated the static HTMLs.
 
-= FOR JAPANESE USERS =
-
-* ?を含むパーマリンクにしている場合は、スラッシュ区切りのパーマリンクに変更する必要があります。
-* オプションで生成するページを選択できます。
-* WordPressがインストールされているパスより下の階層に静的HTMLを出力します。
-
-= 使い方 =
-
-1. サイドバーにある「WP2HTML」リンクをクリックして、プラグインの設定ページに飛びます。
-2. オプションをセットしたり、「生成しないページ」を入力したり、「追加したページ」を入力したりします。
-3. 「保存」ボタンをクリックします。
-4. そうすると、ページ下部に生成されたパスの一覧が表示されます。
-5. 「生成」ボタンをクリックします。
-6. 指定したパスに静的HTMLが生成されます。
-
 == Installation ==
 
 1. From the WP admin panel, click “Plugins” -> “Add new”.
@@ -76,3 +61,6 @@ OR…
 
 = 1.0.0 =
 * First version.
+
+= 1.0.1 =
+* Bug fix.

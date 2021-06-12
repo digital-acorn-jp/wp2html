@@ -1,8 +1,7 @@
 <?php
 
 class wp2html_admin {
-	public $mode, $page;
-	private $options, $wp2html_cl;
+	public $mode, $page, $options, $wp2html_cl;
 
 	public function __construct() {
 		$this->options = get_option( WP2HTML_OPTION_NAME, array() );
@@ -50,20 +49,50 @@ class wp2html_admin {
 	}
 
 	public function run() {
-		$ignore_pages = $this->text2array( $this->options['ignore_pages'] ?? '' );
-		$additional_pages = $this->text2array( $this->options['additional_pages'] ?? '' );
-		$generated_paths = $this->wp2html_cl->create_paths_from_database();
-		$generated_paths = array_merge( $generated_paths, $additional_pages );
-		$generated_paths = array_diff( $generated_paths, $ignore_pages );
+		$generated_paths = $this->genarate_all_paths();
 
 		$path = rtrim( WP2HTML_DOCUMENT_ROOT . $this->options['path'], '/' );
 		$home = get_option( 'home' );
 
 		foreach ( $generated_paths as $to_path ) {
 			$full_path = $path . $to_path;
+			ob_flush();
+			flush();
+			echo esc_html( urldecode( $full_path ) );
+			echo '<br>' . PHP_EOL;
 			$this->get_static_html_from_url( $home . $to_path, $full_path );
 		}
 	}
+
+	public function on_save_post( $post_id, $post ) {
+		if ( $post->post_status != 'publish' ) {
+			return;
+		}
+
+		$generated_paths = $this->genarate_all_paths();
+
+		$path = rtrim( WP2HTML_DOCUMENT_ROOT . $this->options['path'], '/' );
+		$home = get_option( 'home' );
+
+		$permalink = get_permalink( $post_id );
+		$target_path = str_replace( $home, '', $permalink );
+
+		if ( in_array( $target_path, $generated_paths ) ) {
+			$full_path = $path . $target_path;
+			$this->get_static_html_from_url( $permalink, $full_path );
+		}
+	}
+
+	private function genarate_all_paths() {
+		$ignore_pages = $this->text2array( $this->options['ignore_pages'] ?? '' );
+		$additional_pages = $this->text2array( $this->options['additional_pages'] ?? '' );
+		$generated_paths = $this->wp2html_cl->create_paths_from_database();
+		$generated_paths = array_merge( $generated_paths, $additional_pages );
+		$generated_paths = array_diff( $generated_paths, $ignore_pages );
+
+		return $generated_paths;
+	}
+
 
 	/**
 	 * 

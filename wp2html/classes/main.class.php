@@ -50,16 +50,8 @@ class wp2html_main {
 		echo '</div>' . "\n";
 	}
 
-	// public static function check_the_curl() {
-	// 	if ( ! function_exists( 'curl_version' ) ) {
-	// 		return 'Cannot use the curl functions,';
-	// 	}
-		
-	// 	$version = curl_version();
-	// 	if ( ! $version || $version['version_number'] < 464131 ) {
-	// 		return 'The curl requires version 7.21.3 or later.';
-	// 	}
-
-	// 	return '';
-	// }
+	public static function on_save_post( $post_id, $post ) {
+		$ap = new wp2html_admin();
+		$ap->on_save_post( $post_id, $post);
+	}
 }
