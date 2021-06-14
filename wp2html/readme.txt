@@ -4,7 +4,7 @@ Tags: static, html
 Donate link: https://buy.stripe.com/3cs0269AO0E4gX63cc
 Requires at least: 5.4
 Tested up to: 5.7
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.3
@@ -19,6 +19,8 @@ Let's output static HTML and get rid of that overhead.
 * If you use "?" in the permalink, adjust it that use slash-separated.
 * You can select the pages you wish to output in the options screen.
 * Outputs static HTML to the level below the folder where WordPress is installed.
+
+[https://github.com/digital-acorn-jp/wp2html](https://github.com/digital-acorn-jp/wp2html)
 
 = Usage =
 
@@ -59,8 +61,8 @@ OR…
 
 == Changelog ==
 
-= 1.0.0 =
-* First version.
-
 = 1.0.1 =
 * Bug fix.
+
+= 1.0.0 =
+* First version.
