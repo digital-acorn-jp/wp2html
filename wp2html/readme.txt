@@ -4,7 +4,7 @@ Tags: static, html
 Donate link: https://buy.stripe.com/3cs0269AO0E4gX63cc
 Requires at least: 5.4
 Tested up to: 5.7
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.3
@@ -60,6 +60,9 @@ OR…
 
 
 == Changelog ==
+
+= 1.0.2 =
+* Add “Convert URL to absolute path” option.
 
 = 1.0.1 =
 * Bug fix.

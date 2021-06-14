@@ -13,14 +13,22 @@
 .wp2html-settings-section form .row:nth-of-type(2n){
 	background-color: #e0e0e0;
 }
+
+.wp2html-settings-section .information{
+	border: 1px solid #ccc;
+    box-shadow: 10px 10px 0 #ccc;
+    width: calc(100% - 12px);
+    margin: 20px 0;
+}
+
 .wp2html-settings-section .row .label{
 	padding: 0 10px;
 	font-weight: bold;
-	width: 180px;
+	width: 230px;
 }
 
 .wp2html-settings-section .row .item{
-	width: 570px;
+	width: 520px;
 	padding: 0 10px;
 }
 

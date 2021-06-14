@@ -3,7 +3,7 @@
 Plugin Name: wp2html
 Description: Make static HTMLs from WordPress
 Author: Digital Acorn
-Version: 1.0.1
+Version: 1.0.2
 */
 
 // Make sure we don't expose any info if called directly
@@ -11,7 +11,7 @@ if ( !function_exists( 'add_action' ) || !isset( $_SERVER['SERVER_ADDR'] )) {
 	exit;
 }
 
-define( 'WP2HTML_VERSION',        '1.0.1' );
+define( 'WP2HTML_VERSION',        '1.0.2' );
 define( 'WP2HTML_MENU_SLUG',      'wordpress2html' );
 define( 'WP2HTML_PLUGIN_DIR',     plugin_dir_path( __FILE__ ) );
 define( 'WP2HTML_PLUGIN_NAME',    'wp2html' );

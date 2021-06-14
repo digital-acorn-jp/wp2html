@@ -25,6 +25,7 @@ class wp2html_admin {
 	}
 
 	public function index() {
+		$base_path = apply_filters( 'wp2html_change_base_path', WP2HTML_DOCUMENT_ROOT );
 		$connect_server = apply_filters( 'wp2html_connect_server', WP2HTML_CONNECT_SERVER );
 		$ignore_pages = $this->text2array( $this->options['ignore_pages'] ?? '' );
 		$additional_pages = $this->text2array( $this->options['additional_pages'] ?? '' );
@@ -50,8 +51,8 @@ class wp2html_admin {
 
 	public function run() {
 		$generated_paths = $this->genarate_all_paths();
-
-		$path = rtrim( WP2HTML_DOCUMENT_ROOT . $this->options['path'], '/' );
+		$base_path = apply_filters( 'wp2html_change_base_path', WP2HTML_DOCUMENT_ROOT );
+		$path = rtrim( $base_path . $this->options['path'], '/' );
 		$home = get_option( 'home' );
 
 		foreach ( $generated_paths as $to_path ) {
@@ -71,7 +72,8 @@ class wp2html_admin {
 
 		$generated_paths = $this->genarate_all_paths();
 
-		$path = rtrim( WP2HTML_DOCUMENT_ROOT . $this->options['path'], '/' );
+		$base_path = apply_filters( 'wp2html_change_base_path', WP2HTML_DOCUMENT_ROOT );
+		$path = rtrim( $base_path . $this->options['path'], '/' );
 		$home = get_option( 'home' );
 
 		$permalink = get_permalink( $post_id );
@@ -104,7 +106,6 @@ class wp2html_admin {
 	 * 
 	 */
 	private function get_static_html_from_url( $url, $file_path ) {
-		$scheme = parse_url( $url, PHP_URL_SCHEME );
 		$host   = parse_url( $url, PHP_URL_HOST );
 
 		$connect_server = apply_filters( 'wp2html_connect_server', WP2HTML_CONNECT_SERVER );
@@ -134,6 +135,13 @@ class wp2html_admin {
 
 		// strip spaces at start of the line.
 		$html = preg_replace( '/' . PHP_EOL . '\s+/', PHP_EOL, $html );
+
+		if ( isset( $this->options['absolute_path'] ) ) {
+			$home = get_option( 'home' );
+			// homeだけのURLは/に置き換え
+			$html = str_replace( '"' . $home . '"', '/', $html );
+			$html = str_replace( $home, '', $html );
+		}
 
 		$html = apply_filters( 'wp2html_get_static_html_from_url', $html, $url );
 

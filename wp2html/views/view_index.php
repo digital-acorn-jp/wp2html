@@ -2,25 +2,31 @@
 
 <div class="wp2html-settings-section">
 
-	<div class="row">
-		<div class="label"><?php _e( 'Base URL', WP2HTML_PLUGIN_NAME ) ?></div>
-		<div class="item"><?php echo esc_html( get_option( 'home' ) ) ?></div>
+	<div class="information">
+		<div class="row">
+			<div class="label"><?php _e( 'Base URL', WP2HTML_PLUGIN_NAME ) ?></div>
+			<div class="item"><?php echo esc_html( get_option( 'home' ) ) ?></div>
+		</div>
+
+		<div class="row">
+			<div class="label"><?php _e( 'IP address to be accessed', WP2HTML_PLUGIN_NAME ) ?></div>
+			<div class="item"><?php echo esc_html( $connect_server ) ?></div>
+		</div>
 	</div>
-
-
-	<div class="row">
-		<div class="label"><?php _e( 'IP address to be accessed', WP2HTML_PLUGIN_NAME ) ?></div>
-		<div class="item"><?php echo esc_html( $connect_server ) ?></div>
-	</div>
-
-	<hr>
 
 	<form action="<?php $this->make_admin_url( 'save' ) ?>" method="post">
 	<div class="row">
 		<div class="label"><?php _e( 'The path to write the HTML', WP2HTML_PLUGIN_NAME ) ?></div>
 		<div class="item">
-			<?php echo esc_html( WP2HTML_DOCUMENT_ROOT ) ?><input type="text" name="path" value="<?php $this->option_value( 'path', '/' ) ?>">
+			<?php echo esc_html( $base_path ) ?><input type="text" name="path" value="<?php $this->option_value( 'path', '/' ) ?>">
 			<div class="error-message"><?php echo esc_html( $this->error_message['path'] ?? '' ) ?></div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="label"><label for="absolute_path"><?php _e( 'Convert URL to absolute path', WP2HTML_PLUGIN_NAME ) ?></label></div>
+		<div class="item">
+			<input type="checkbox" value="1" id="absolute_path" name="absolute_path"<?php $this->option_checked( 'absolute_path' ) ?>>
 		</div>
 	</div>
 
