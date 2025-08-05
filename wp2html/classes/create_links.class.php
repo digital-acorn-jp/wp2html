@@ -84,48 +84,56 @@ class wp2html_create_links {
 		$output = array();
 
 		if ( 'yearly' === $type ) {
-			$sql =
+			$sql = $wpdb->prepare(
 				"SELECT COUNT(ID) AS `count`, YEAR(post_date) AS `year` ".
-				"FROM {$wpdb->posts} ".
+				"FROM %s ".
 				"WHERE post_type = 'post' AND post_status = 'publish' ".
 				"GROUP BY YEAR(post_date) ".
-				"ORDER BY post_date";
+				"ORDER BY post_date",
+				$wpdb->posts
+			);
 
 			$output = array_merge( $output, $this->get_archive_links_from_sql_and_function( $sql, 'get_year_link' ) );
 		}
 		elseif ( 'monthly' === $type ) {
-			$sql =
+			$sql = $wpdb->prepare(
 				"SELECT COUNT(ID) AS `count`, YEAR(post_date) AS `year`, MONTH(post_date) AS `month` ".
-				"FROM {$wpdb->posts} ".
+				"FROM %s ".
 				"WHERE post_type = 'post' AND post_status = 'publish' ".
 				"GROUP BY YEAR(post_date), MONTH(post_date) ".
-				"ORDER BY post_date";
+				"ORDER BY post_date",
+				$wpdb->posts
+			);
 
 			$output = array_merge( $output, $this->get_archive_links_from_sql_and_function( $sql, 'get_month_link' ) );
 		}
 		elseif ( 'daily' === $type ) {
-			$sql =
+			$sql = $wpdb->prepare(
 				"SELECT COUNT(ID) AS `count`, YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, DAYOFMONTH(post_date) AS `day` ".
-				"FROM {$wpdb->posts} ".
+				"FROM %s ".
 				"WHERE post_type = 'post' AND post_status = 'publish' ".
 				"GROUP BY YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) ".
-				"ORDER BY post_date";
+				"ORDER BY post_date",
+				$wpdb->posts
+			);
 
 			$output = array_merge( $output, $this->get_archive_links_from_sql_and_function( $sql, 'get_day_link' ) );
 		}
 		elseif ( 'author' === $type ) {
-			$sql =
+			$sql = $wpdb->prepare(
 				"SELECT COUNT(ID) AS `count`, post_author ".
-				"FROM {$wpdb->posts} ".
+				"FROM %s ".
 				"WHERE post_type = 'post' AND post_status = 'publish' ".
 				"GROUP BY post_author ".
-				"ORDER BY post_author";
+				"ORDER BY post_author",
+				$wpdb->posts
+			);
 
 			$output = array_merge( $output, $this->get_archive_links_from_sql_and_function( $sql, 'get_author_posts_url' ) );
 		}
 		elseif ( 'post_type' === $type && $slug ) {
 			$sql = $wpdb->prepare(
-				"SELECT COUNT(ID) AS `count` FROM {$wpdb->posts} WHERE post_type = %s AND post_status = 'publish'", $slug
+				"SELECT COUNT(ID) AS `count` FROM %s WHERE post_type = %s AND post_status = 'publish'", array( $wpdb->posts, $slug )
 			);
 
 			$output = array_merge( $output, $this->get_archive_links_from_sql_and_function( $sql, 'get_post_type_archive_link', $slug ) );
@@ -133,8 +141,8 @@ class wp2html_create_links {
 		elseif ( 'category' === $type || 'post_tag' === $type ) {
 			$sql = $wpdb->prepare(
 				"SELECT tt.`count`, tm.`slug` ".
-				"FROM {$wpdb->term_taxonomy} AS tt LEFT JOIN {$wpdb->terms} AS tm ON (tt.term_id = tm.term_id) ".
-				"WHERE tt.`taxonomy` = %s AND tt.`count` > 0", $type
+				"FROM %s AS tt LEFT JOIN %s AS tm ON (tt.term_id = tm.term_id) ".
+				"WHERE tt.`taxonomy` = %s AND tt.`count` > 0", array( $wpdb->term_taxonomy, $wpdb->terms, $type )
 			);
 
 			$output = array_merge( $output, $this->get_archive_links_from_sql_and_function( $sql, 'get_term_link', $type ) );
@@ -142,8 +150,8 @@ class wp2html_create_links {
 		elseif ( 'taxonomy' === $type ) {
 			$sql = $wpdb->prepare(
 				"SELECT tt.`count`, tm.`slug` ".
-				"FROM {$wpdb->term_taxonomy} AS tt LEFT JOIN {$wpdb->terms} AS tm ON (tt.term_id = tm.term_id) ".
-				"WHERE tt.`taxonomy` = %s AND tt.`count` > 0", $slug
+				"FROM %s AS tt LEFT JOIN %s AS tm ON (tt.term_id = tm.term_id) ".
+				"WHERE tt.`taxonomy` = %s AND tt.`count` > 0", array( $wpdb->term_taxonomy, $wpdb->terms, $slug )
 			);
 
 			$output = array_merge( $output, $this->get_archive_links_from_sql_and_function( $sql, 'get_term_link', $slug ) );
@@ -157,19 +165,19 @@ class wp2html_create_links {
 	 * 
 	 * Get archive links from SQL and function
 	 * 
-	 * @param string $sql
+	 * @param string $prepared_sql
 	 * @param string $func
 	 * @param string $slug
 	 * @return array
 	 */
-	private function get_archive_links_from_sql_and_function( $sql, $func, $slug = '' ) {
+	private function get_archive_links_from_sql_and_function( $prepared_sql, $func, $slug = '' ) {
 		global $wpdb;
 		$posts_per_page = get_option( 'posts_per_page' );
 
 		$output = array();
 
-		if ( $sql ) {
-			$results = $wpdb->get_results( $sql );
+		if ( $prepared_sql ) {
+			$results = $wpdb->get_results( $prepared_sql );
 		}
 
 		if ( $results ) {

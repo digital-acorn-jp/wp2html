@@ -3,21 +3,21 @@
 Plugin Name: wp2html
 Description: Make static HTMLs from WordPress
 Author: Digital Acorn
-Version: 1.0.2
+Version: 1.0.3
+License: GPLv2 or later
 */
 
 // Make sure we don't expose any info if called directly
-if ( !function_exists( 'add_action' ) || !isset( $_SERVER['SERVER_ADDR'] )) {
+if ( !function_exists( 'add_action' ) || ( ! isset( $_SERVER['SERVER_ADDR'] ) && ! isset( $_SERVER['SERVER_NAME'] ) ) ) {
 	exit;
 }
 
 define( 'WP2HTML_VERSION',        '1.0.2' );
 define( 'WP2HTML_MENU_SLUG',      'wordpress2html' );
 define( 'WP2HTML_PLUGIN_DIR',     plugin_dir_path( __FILE__ ) );
-define( 'WP2HTML_PLUGIN_NAME',    'wp2html' );
 define( 'WP2HTML_PLUGIN_TITLE',   'Make static HTML from WordPress' );
 define( 'WP2HTML_DOCUMENT_ROOT',  $_SERVER['DOCUMENT_ROOT']);
-define( 'WP2HTML_CONNECT_SERVER', $_SERVER['SERVER_ADDR']);
+define( 'WP2HTML_CONNECT_SERVER', @$_SERVER['SERVER_ADDR'] ?? $_SERVER['SERVER_NAME']);
 define( 'WP2HTML_OPTION_NAME',    'wp2html_options' );
 define( 'WP2HTML_DEFAULT_PAGED',  'page/__page__' );
 define( 'WP2HTML_USER_AGENT',     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36' );

@@ -1,9 +1,14 @@
 <?php
+require_once(ABSPATH.'wp-admin/includes/file.php');
 
 class wp2html_admin {
 	public $mode, $page, $options, $wp2html_cl;
+	private $post_types, $taxonomies;
 
 	public function __construct() {
+		global $wp_filesystem;
+		WP_Filesystem();
+
 		$this->options = get_option( WP2HTML_OPTION_NAME, array() );
 		$this->taxonomies = get_taxonomies( array(
 			'_builtin' => false,
@@ -37,6 +42,7 @@ class wp2html_admin {
 	}
 
 	public function save() {
+		check_admin_referer( 'save-settings' );
 		$input = filter_input_array( INPUT_POST );
 		$generate_path = $this->detoxify_path( $input['path'] );
 		$input['path'] = $generate_path == '' ? '/' : $generate_path ;
@@ -106,7 +112,7 @@ class wp2html_admin {
 	 * 
 	 */
 	private function get_static_html_from_url( $url, $file_path ) {
-		$host   = parse_url( $url, PHP_URL_HOST );
+		$host   = wp_parse_url( $url, PHP_URL_HOST );
 
 		$connect_server = apply_filters( 'wp2html_connect_server', WP2HTML_CONNECT_SERVER );
 		$user_agent     = apply_filters( 'wp2html_set_user_agent', WP2HTML_USER_AGENT );
@@ -146,11 +152,38 @@ class wp2html_admin {
 		$html = apply_filters( 'wp2html_get_static_html_from_url', $html, $url );
 
 		if ( $html ) {
+			global $wp_filesystem;
+
 			// 保存
 			$file_path = apply_filters( 'wp2html_change_file_path', $file_path );
 			$file_path = urldecode( $file_path );
-			@mkdir( $file_path, 0777, true);
-			file_put_contents( $file_path . 'index.html', $html );
+			$this->make_directory( $file_path );
+			if (! $wp_filesystem->put_contents( $file_path . 'index.html', $html ) ) {
+				echo "Error. creating file." . PHP_EOL;
+			}
+		}
+	}
+
+	/**
+	 * make_directory
+	 * Recursively create the output directory.
+	 * 
+	 * @param string $file_path
+	 */
+	private function make_directory( $file_path ) {
+		global $wp_filesystem;
+		$file_path = trim( $file_path, '/' );
+		if ( '' == $file_path ) {
+			return;
+		}
+		$dirs = explode( '/', $file_path );
+		$path = '';
+		for ( $i = 0; $i < count($dirs); $i++ ) {
+			$path .= '/' . $dirs[ $i ];
+			if ( $wp_filesystem->exists( $path ) ) {
+				continue;
+			}
+			$wp_filesystem->mkdir( $path, 0777 );
 		}
 	}
 
