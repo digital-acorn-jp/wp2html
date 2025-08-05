@@ -51,6 +51,7 @@ OR…
 5. Click “Install”.. and then “Activate plugin”.
 
 ## Change log
+* `1.0.3` Vulnerability fixed. Compatible with version 6.8.
 * `1.0.2` Add “Convert URL to absolute path” option.
 * `1.0.1` Bug fix.
 * `1.0.0` First version.
